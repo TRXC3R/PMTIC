@@ -15,12 +15,16 @@ class EstacionesAEMET(param.Parameterized):
     """
 
     # Aquí se crean los objetos que luego se representan en la interfaz gráfica
+    # Se crean los widgents con los nombres de las variables
     altura_minima = param.Integer()
-    provincias = param.ListSelector(default=['TODAS'])
-    nieve_minima = param.Integer()
+    #provincias = param.String(default = 'TODAS') #El usuario debe introducir a mano la provincia de la que quiere buscar, TODAS muetsra todas las estaciones
+    #provincias = param.String(default = 'TODAS') #Una lista bajo mi punto de vista más facil de usar, un desplegable
+    #provincias = param.List(default = ['TODAS']) #Permite mediante entrada de texto seleccionar las provincias: ['MADRID'], ['BARCELONA']
+    provincias = param.ListSelector(default=['TODAS']) #Se le pasa como parámetro una lista y lo muestra como una lista para deslizar
+    nieve_minima = param.Integer() #Parámetro añadido para que se muestre las estaciones en las que se haya nevado, el valor de nieve a 0 permite que se visualicen todas las estaciones
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(**kwargs)  
         self.datos_aemet = Datos_AEMET()
         self.param['provincias'].objects = self.datos_aemet.get_provincias()
         limites_altura = self.datos_aemet.get_altura_min_max()
@@ -74,7 +78,7 @@ class EstacionesAEMET(param.Parameterized):
         # - `size=12`: Establece el tamaño de los puntos.
         # - `color='altitud'`: Colorea los puntos según los valores de la columna 'altitud'.
         # - `cmap='viridis'`: Utiliza la paleta de colores 'viridis' para representar la altitud (gradiente de color).
-        puntos = puntos.opts(size=12, color='altitud', cmap='viridis')
+        puntos = puntos.opts(size=12, color='altitud', cmap='viridis') 
 
         
         return mapa * puntos
